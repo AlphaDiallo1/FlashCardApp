@@ -19,14 +19,15 @@ function Study() {
     async function loadDeck() {
       try {
         const response = await readDeck(deckId, abortController.signal);
-        setCards(response.cards);
+        const deckCards = response.cards || [];
+        setCards(deckCards);
         setDeckName(response.name);
-        if (response.cards.length > 0) {
-          setCurrentCard(response.cards[0]); // set the first card as current card  
+        if (deckCards.length > 0) {
+          setCurrentCard(deckCards[0]); // set the first card as current card  
         }
       } catch (error) {
-        if (error.name === "AbortError") {
-          console.log("Aborted", setCards);
+        if (error.name !== "AbortError") {
+          console.error("Error loading deck:", error);
         }
       }
     }
@@ -38,12 +39,10 @@ function Study() {
   const handleNext = () => {
     if (count < cards.length - 1) {
       setCount(count + 1); // render next card 
-      setFlip(true); // reset flip state
     } else {
       const restart = window.confirm("Reset cards? Click 'Cancel' to return to the home screen.");
       if (restart) {
         setCount(0); // reset to the first card 
-        setFlip(true); // reset flip state
       } else {
         navigate("/"); // navigate back to home 
       }
@@ -72,7 +71,7 @@ function Study() {
         <h6>Card {count + 1} of {cards.length}</h6>
         <p className="card-title">{currentCard.back}</p>
         <button className="btn btn-secondary" onClick={() => setFlip(true)}>Flip</button>
-        <button className="btn btn-primary" onClick={() => { handleNext(); }}>Next</button>
+        <button className="btn btn-primary" onClick={() => { setFlip(true); handleNext(); }}>Next</button>
       </div>
     </div>
   );
@@ -115,4 +114,5 @@ function Study() {
 }
 
 export default Study;
+
 
