@@ -76,5 +76,4 @@ The "EditCard" 'function/component' displays the "nav-bar" 'div'. which
 The "AddCard" 'function/component' allows users to add a "card" to the 
 specific "deck" and 'local server'.
 
-## src/Layout/style.css
-CSS styling for all the 'files' to replicate Chegg Skill's example web page.
+
